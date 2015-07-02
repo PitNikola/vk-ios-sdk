@@ -12,6 +12,7 @@
 VKDisplayType const VK_DISPLAY_IOS = @"ios";
 VKDisplayType const VK_DISPLAY_MOBILE = @"mobile";
 
+NSString *const VK_API_URI = @"api.vk.com/method/";
 NSString *const VK_ORIGINAL_CLIENT_BUNDLE = @"com.vk.vkclient";
 NSString *const VK_ORIGINAL_HD_CLIENT_BUNDLE = @"com.vk.vkhd";
 NSString *const VK_DEBUG_CLIENT_BUNDLE = @"com.vk.odnoletkov.client";
@@ -22,6 +23,7 @@ NSString *const VK_API_SORT = @"sort";
 NSString *const VK_API_OFFSET = @"offset";
 NSString *const VK_API_COUNT = @"count";
 NSString *const VK_API_OWNER_ID = @"owner_id";
+
 
 //auth
 NSString *const VK_API_LANG = @"lang";

@@ -34,6 +34,7 @@ extern NSString *const VK_API_SORT;
 extern NSString *const VK_API_OFFSET;
 extern NSString *const VK_API_COUNT;
 extern NSString *const VK_API_OWNER_ID;
+extern NSString *const VK_API_URI;
 
 //auth
 extern NSString *const VK_API_LANG;

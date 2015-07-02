@@ -25,12 +25,12 @@
 
 #import "VKHTTPClient.h"
 #import "VKSdkVersion.h"
+#import "VKSdk.h"
 #import "VKImageParameters.h"
 #import "VKUploadImage.h"
 #import "VKUtil.h"
 
 static VKHTTPClient *__clientInstance = nil;
-static NSString const *VK_API_URI = @"api.vk.com/method/";
 static NSString *const kVKMultipartFormBoundary = @"Boundary(======VK_SDK======)";
 
 @interface VKHTTPClient ()
@@ -98,7 +98,7 @@ static NSString *const kVKMultipartFormBoundary = @"Boundary(======VK_SDK======)
     if (!path) {
         path = @"";
     }
-    NSURL *apiUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http%@://%@", secure ? @"s" : @"", VK_API_URI]];
+    NSURL *apiUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http%@://%@", secure ? @"s" : @"", [VKSdk instance].apiURI]];
     NSURL *url = nil;
     if ([path hasPrefix:@"http"])
         url = [NSURL URLWithString:path];

@@ -52,6 +52,7 @@ typedef enum : NSUInteger {
 @property(nonatomic, assign) VKAuthorizationState authState;
 @property(nonatomic, copy) NSString *currentAppId;
 @property(nonatomic, readwrite, copy) NSString *apiVersion;
+@property(nonatomic, readwrite, copy) NSString *apiURI;
 @property(nonatomic, strong) VKAccessToken *accessToken;
 @property(nonatomic, strong) NSArray *permissions;
 
@@ -81,16 +82,7 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
 + (void)initializeWithDelegate:(id <VKSdkDelegate>)delegate
                       andAppId:(NSString *)appId
                     apiVersion:(NSString *)version {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        vkSdkInstance = [(VKSdk *) [super alloc] initUniqueInstance];
-    });
-
-    vkSdkInstance.delegate = delegate;
-    vkSdkInstance.currentAppId = appId;
-    vkSdkInstance.apiVersion = version;
-
-    [[VKRequestsScheduler instance] setEnabled:YES];
+    [self initializeWithDelegate:delegate andAppId:appId apiVersion:version apiURI:VK_API_URI];
 }
 
 + (void)initializeWithDelegate:(id <VKSdkDelegate>)delegate andAppId:(NSString *)appId andCustomToken:(VKAccessToken *)token {
@@ -103,6 +95,7 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
     vkSdkInstance.delegate = delegate;
     vkSdkInstance.currentAppId = appId;
     vkSdkInstance.apiVersion = VK_SDK_API_VERSION;
+    vkSdkInstance.apiURI = VK_API_URI;
 
     if (token && token != vkSdkInstance.accessToken) {
         vkSdkInstance.accessToken = token;
@@ -110,6 +103,22 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
             [delegate vkSdkAcceptedUserToken:token];
         }
     }
+    [[VKRequestsScheduler instance] setEnabled:YES];
+}
+
++ (void)initializeWithDelegate:(id<VKSdkDelegate>)delegate
+                      andAppId:(NSString *)appId
+                    apiVersion:(NSString *)version
+                        apiURI:(NSString *)apiURI {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        vkSdkInstance = [(VKSdk *) [super alloc] initUniqueInstance];
+    });
+    
+    vkSdkInstance.delegate = delegate;
+    vkSdkInstance.currentAppId = appId;
+    vkSdkInstance.apiVersion = version;
+    vkSdkInstance.apiURI = apiURI;
     [[VKRequestsScheduler instance] setEnabled:YES];
 }
 
