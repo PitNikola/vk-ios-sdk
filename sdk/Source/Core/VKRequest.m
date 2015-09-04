@@ -421,10 +421,14 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
 - (void)setupProgress:(VKHTTPOperation *)operation {
     if (self.progressBlock) {
         [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-            self.progressBlock(VKProgressTypeUpload, totalBytesWritten, totalBytesExpectedToWrite);
+            if (self.progressBlock) {
+                self.progressBlock(VKProgressTypeUpload, totalBytesWritten, totalBytesExpectedToWrite);
+            }
         }];
         [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-            self.progressBlock(VKProgressTypeDownload, totalBytesRead, totalBytesExpectedToRead);
+            if (self.progressBlock) {
+                self.progressBlock(VKProgressTypeDownload, totalBytesRead, totalBytesExpectedToRead);
+            }
         }];
     }
 }
