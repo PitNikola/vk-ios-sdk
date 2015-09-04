@@ -503,12 +503,24 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
 - (NSString *)preferredLang {
     NSString *lang = _preferredLang;
     if (self.useSystemLanguage) {
-        lang = [NSLocale preferredLanguages][0];
-        if ([lang isEqualToString:@"uk"]) {
-            lang = @"ua";
+        static NSString *systemLang = nil;
+        if (!systemLang) {
+            systemLang = [[NSLocale preferredLanguages] firstObject];
+            if (systemLang) {
+                if ([systemLang containsString:@"-"]) {
+                    systemLang = [[systemLang componentsSeparatedByString:@"-"] firstObject];
+                }
+                if ([systemLang isEqualToString:@"uk"]) {
+                    systemLang = @"ua";
+                }
+            }
+            else {
+                systemLang = _preferredLang;
+            }
         }
-        if (![SUPPORTED_LANGS_ARRAY containsObject:lang])
-            lang = _preferredLang;
+        if ([SUPPORTED_LANGS_ARRAY containsObject:systemLang]) {
+            lang = systemLang;
+        }
     }
     return lang;
 }
