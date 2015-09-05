@@ -511,7 +511,9 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
         if (!systemLang) {
             systemLang = [[NSLocale preferredLanguages] firstObject];
             if (systemLang) {
-                if ([systemLang containsString:@"-"]) {
+                NSRange rangeOfHyphen = [systemLang rangeOfString:@"-"];
+                BOOL containsHyphen = rangeOfHyphen.length != 0;
+                if (containsHyphen) {
                     systemLang = [[systemLang componentsSeparatedByString:@"-"] firstObject];
                 }
                 if ([systemLang isEqualToString:@"uk"]) {
