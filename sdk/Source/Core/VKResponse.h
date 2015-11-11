@@ -38,4 +38,7 @@ Class presenting answer from API
 /// Original response string from server
 @property(nonatomic, copy) NSString *responseString;
 
+@property(nonatomic, strong) NSArray *executeErrors;
+
+
 @end

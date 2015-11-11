@@ -354,6 +354,16 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
     else {
         vkResp.json = JSON;
     }
+    
+    NSArray *executeErrorsJSON = JSON[@"execute_errors"];
+    if(executeErrorsJSON != nil) {
+        NSMutableArray *executeErrors = [NSMutableArray new];
+        for(NSDictionary *errorJSON in executeErrorsJSON) {
+            NSError *error = [NSError errorWithVkError:[VKError errorWithJson:errorJSON]];
+            [executeErrors addObject:error];
+        }
+        vkResp.executeErrors = [NSArray arrayWithArray:executeErrors];
+    }
 
     for (VKRequest *postRequest in _postRequestsQueue) {
         [[VKRequestsScheduler instance] scheduleRequest:postRequest];
