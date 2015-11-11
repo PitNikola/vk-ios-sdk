@@ -138,6 +138,10 @@ Entry point for using VK sdk. Should be initialized at application start
 
 /// API version for making requests
 @property(nonatomic, readonly, copy) NSString *apiVersion;
+
+// API URI for making requests
+@property(nonatomic, readonly, copy) NSString *apiURI;
+
 ///-------------------------------
 /// @name Initialization
 ///-------------------------------
@@ -159,6 +163,15 @@ Initialize SDK with responder for global SDK events
 */
 + (instancetype)initializeWithAppId:(NSString *)appId
                          apiVersion:(NSString *)version;
+/**
+ Initialize SDK with responder for global SDK events
+ @param appId your application id (if you haven't, you can create standalone application here https://vk.com/editapp?act=create )
+ @param apiVersion if you want to use latest API version, pass required version here
+ @param apiURI if you want to use custom apiURI, pass your uri here
+ */
++ (instancetype)initializeWithAppId:(NSString *)appId
+                         apiVersion:(NSString *)version
+                             apiURI:(NSString *)apiURI;
 
 /**
  Adds a weak object reference to an object implementing the VKSdkDelegate protocol

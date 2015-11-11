@@ -529,12 +529,6 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
 
             return YES;
         }
-        else if(error.apiError.errorCode == 5) {
-            vksdk_dispatch_on_main_queue_now(^{
-                [[[VKSdk instance] delegate] vkSdkTokenHasExpired:[VKSdk getAccessToken]];
-            });
-            return YES;
-        }
     }
 
     return NO;
@@ -559,7 +553,7 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
                 }
             }
             else {
-                systemLang = _preferredLang;
+                systemLang = _requestLang;
             }
         }
         if ([SUPPORTED_LANGS_ARRAY containsObject:systemLang]) {

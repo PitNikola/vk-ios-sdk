@@ -59,6 +59,7 @@
 
 @property(nonatomic, readwrite, copy) NSString *currentAppId;
 @property(nonatomic, readwrite, copy) NSString *apiVersion;
+@property(nonatomic, readwrite, copy) NSString *apiURI;
 @property(nonatomic, readwrite, strong) VKAccessToken *accessToken;
 @property(nonatomic, weak) UIViewController *presentedSafariViewController;
 
@@ -92,14 +93,19 @@ static NSString *VK_AUTHORIZE_URL_STRING = @"vkauthorize://authorize";
 }
 
 + (instancetype)initializeWithAppId:(NSString *)appId apiVersion:(NSString *)version {
+    return [self initializeWithAppId:appId apiVersion:version apiURI:VK_API_URI];
+}
+
++ (instancetype)initializeWithAppId:(NSString *)appId apiVersion:(NSString *)version apiURI:(NSString *)apiURI {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         vkSdkInstance = [(VKSdk *) [super alloc] initUniqueInstance];
     });
-
+    
     vkSdkInstance.currentAppId = appId;
     vkSdkInstance.apiVersion = version;
-
+    vkSdkInstance.apiURI = apiURI;
+    
     [[VKRequestsScheduler instance] setEnabled:YES];
     return vkSdkInstance;
 }
