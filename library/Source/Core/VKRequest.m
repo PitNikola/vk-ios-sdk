@@ -29,7 +29,7 @@
 #import "VKJSONOperation.h"
 #import "VKRequestsScheduler.h"
 
-#define SUPPORTED_LANGS_ARRAY @[@"ru", @"en", @"ua", @"es", @"fi", @"de", @"it"]
+#define SUPPORTED_LANGS_ARRAY @[@"ru", @"en", @"uk", @"es", @"fi", @"de", @"it"]
 
 void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
     if (!block) {
@@ -539,29 +539,18 @@ void vksdk_dispatch_on_main_queue_now(void(^block)(void)) {
 - (NSString *)language {
     NSString *lang = self.requestLang;
     if (self.useSystemLanguage) {
-        static NSString *systemLang = nil;
-        if (!systemLang) {
-            systemLang = [[NSLocale preferredLanguages] firstObject];
-            if (systemLang) {
-                NSRange rangeOfHyphen = [systemLang rangeOfString:@"-"];
-                BOOL containsHyphen = rangeOfHyphen.length != 0;
-                if (containsHyphen) {
-                    systemLang = [[systemLang componentsSeparatedByString:@"-"] firstObject];
-                }
-                if ([systemLang isEqualToString:@"uk"]) {
-                    systemLang = @"ua";
-                }
-            }
-            else {
-                systemLang = _requestLang;
-            }
-        }
-        if ([SUPPORTED_LANGS_ARRAY containsObject:systemLang]) {
-            lang = systemLang;
+        static NSString *sysLang = nil;
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            sysLang = [[[[[NSLocale preferredLanguages] firstObject] componentsSeparatedByCharactersInSet:[NSCharacterSet punctuationCharacterSet]] firstObject] lowercaseString];
+        });
+        if ([SUPPORTED_LANGS_ARRAY containsObject:sysLang]) {
+            lang = sysLang;
         }
     }
     return lang;
 }
+
 
 - (dispatch_queue_t)responseQueue {
     if (!_responseQueue) {
